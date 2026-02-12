@@ -1,470 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Manager — tokenLauncher.fun</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tokenLauncher.fun — We're Hiring</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: #12121a;
+    --bg-card-hover: #181825;
+    --border: #1e1e2e;
+    --border-accent: #2d2d44;
+    --text: #e2e2f0;
+    --text-muted: #8888a8;
+    --text-dim: #55556a;
+    --accent: #7c5cfc;
+    --accent-glow: #7c5cfc44;
+    --green: #34d399;
+    --green-dim: #34d39933;
+    --orange: #fb923c;
+    --orange-dim: #fb923c33;
+    --cyan: #22d3ee;
+    --cyan-dim: #22d3ee33;
+    --pink: #f472b6;
+    --pink-dim: #f472b633;
+    --red: #f87171;
+  }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0a0a;
-            color: #e5e5e5;
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-        .header {
-            margin-bottom: 48px;
-            border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 24px;
-        }
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
 
-        .logo {
-            font-size: 32px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 12px;
-        }
+  /* Glow orbs */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-orb-1 { width: 500px; height: 500px; background: var(--accent); top: -100px; left: -100px; }
+  .glow-orb-2 { width: 400px; height: 400px; background: var(--cyan); bottom: 10%; right: -80px; }
+  .glow-orb-3 { width: 350px; height: 350px; background: var(--pink); top: 50%; left: 30%; opacity: 0.08; }
 
-        .tagline {
-            font-size: 18px;
-            color: #888;
-            font-weight: 400;
-        }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
 
-        h1 {
-            font-size: 42px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 16px;
-            margin-top: 40px;
-        }
+  /* Header */
+  header {
+    padding: 40px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
 
-        h2 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #fff;
-            margin-top: 48px;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a2a2a;
-        }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
 
-        h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #fff;
-            margin-top: 32px;
-            margin-bottom: 16px;
-        }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
 
-        p {
-            font-size: 16px;
-            color: #c0c0c0;
-            margin-bottom: 16px;
-        }
+  .badge-hiring {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
 
-        .role-type {
-            display: inline-block;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 24px;
-        }
+  .badge-hiring::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
 
-        .highlight-box {
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 24px;
-            margin: 24px 0;
-        }
+  @keyframes pulse-badge {
+    0%, 100% { box-shadow: 0 0 0 0 var(--green-dim); }
+    50% { box-shadow: 0 0 20px 4px var(--green-dim); }
+  }
 
-        .highlight-box h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #fff;
-        }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 16px 0;
-        }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-        ul li {
-            padding: 12px 0 12px 24px;
-            color: #c0c0c0;
-            position: relative;
-            font-size: 16px;
-        }
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 640px;
+    line-height: 1.7;
+  }
 
-        ul li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #666;
-            font-weight: bold;
-        }
+  /* Section titles */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
 
-        .responsibilities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 24px 0;
-        }
+  .section-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 32px;
+  }
 
-        .responsibility-card {
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 20px;
-        }
+  section {
+    margin-bottom: 72px;
+  }
 
-        .responsibility-card h4 {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
+  /* About block */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
 
-        .responsibility-card p {
-            font-size: 14px;
-            color: #999;
-            margin: 0;
-        }
+  .about-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
 
-        .timeline {
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 24px;
-            margin: 24px 0;
-        }
+  .about-card:hover {
+    border-color: var(--border-accent);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
 
-        .timeline-item {
-            display: flex;
-            gap: 20px;
-            padding: 16px 0;
-            border-bottom: 1px solid #1a1a1a;
-        }
+  .about-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
 
-        .timeline-item:last-child {
-            border-bottom: none;
-        }
+  .about-card .value {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+  }
 
-        .timeline-phase {
-            min-width: 120px;
-            font-weight: 600;
-            color: #fff;
-            font-size: 14px;
-        }
+  /* Job Cards */
+  .job-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 20px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .timeline-content {
-            flex: 1;
-            color: #999;
-            font-size: 14px;
-        }
+  .job-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 24px 0;
-        }
+  .job-card:hover {
+    border-color: var(--border-accent);
+    background: var(--bg-card-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px -20px rgba(124, 92, 252, 0.15);
+  }
 
-        .skill-tag {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #c0c0c0;
-        }
+  .job-card:hover::before { opacity: 1; }
 
-        .cta-section {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 40px;
-            margin: 48px 0;
-            text-align: center;
-        }
+  .job-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 
-        .cta-section h3 {
-            margin: 0 0 16px 0;
-            font-size: 24px;
-        }
+  .job-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
 
-        .cta-section p {
-            margin-bottom: 24px;
-            color: #999;
-        }
+  .job-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-weight: 600;
+  }
 
-        .apply-button {
-            display: inline-block;
-            background: #fff;
-            color: #0a0a0a;
-            padding: 14px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
+  .type-tl { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); }
+  .type-be { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--cyan); }
+  .type-pd { background: var(--pink-dim); color: var(--pink); border: 1px solid var(--pink); }
 
-        .apply-button:hover {
-            background: #e5e5e5;
-            transform: translateY(-2px);
-        }
+  .job-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 32px 0;
-        }
+  .job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
 
-        .stat-card {
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-        }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
 
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
+  .job-meta {
+    display: flex;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
 
-        .stat-label {
-            font-size: 14px;
-            color: #888;
-        }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
 
-        .footer {
-            margin-top: 80px;
-            padding-top: 24px;
-            border-top: 1px solid #2a2a2a;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
+  .meta-item svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.6;
+  }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 32px;
-            }
+  .meta-value {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
 
-            h2 {
-                font-size: 24px;
-            }
+  /* Requirements */
+  .req-list {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
 
-            .responsibilities-grid {
-                grid-template-columns: 1fr;
-            }
+  .req-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  .req-list li::before {
+    content: '▸';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Perks */
+  .perks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .perk {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .perk:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .perk-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .perk-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .perk-desc {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 60px 0;
+    margin-bottom: 0;
+  }
+
+  .cta-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-size: 1rem;
+  }
+
+  /* Application Form */
+  .apply-form {
+    max-width: 600px;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-dim);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  .file-upload {
+    position: relative;
+    background: var(--bg-card);
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .file-upload:hover {
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+  }
+
+  .file-upload.has-file {
+    border-color: var(--green);
+    border-style: solid;
+  }
+
+  .file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .file-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .file-upload-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .file-upload-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+
+  .file-name {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--green);
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-family: 'Sora', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px var(--accent-glow), 0 10px 40px -10px rgba(124, 92, 252, 0.4);
+  }
+
+  .cta-button svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .cta-button:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Timeline summary */
+  .timeline {
+    display: flex;
+    gap: 0;
+    margin-top: 32px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .timeline-block {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: background 0.3s ease;
+  }
+
+  .timeline-block:last-child { border-right: none; }
+  .timeline-block:hover { background: var(--bg-card-hover); }
+
+  .timeline-month {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .timeline-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+
+  /* Fade-in animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.05s; }
+  .fade-up:nth-child(2) { animation-delay: 0.12s; }
+  .fade-up:nth-child(3) { animation-delay: 0.19s; }
+  .fade-up:nth-child(4) { animation-delay: 0.26s; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .job-header { flex-direction: column; }
+    .job-meta { flex-direction: column; gap: 12px; }
+    .timeline { flex-direction: column; }
+    .timeline-block { border-right: none; border-bottom: 1px solid var(--border); }
+    .timeline-block:last-child { border-bottom: none; }
+    .perks-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">tokenLauncher.fun</div>
-            <div class="tagline">We're Hiring — Join the Revolution</div>
-        </div>
 
-        <h1>Product Manager</h1>
-        <div class="role-type">Full-Time · Remote · Crypto/Web3</div>
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+<div class="glow-orb glow-orb-3"></div>
 
-        <p>We're building the all-in-one platform for crypto token launches, trading, and tracking. In 16 weeks, we're shipping bundling, snipers, limit orders, DCA, AI website builders, multi-chain support, and more. We need a Product Manager who can drive execution, prioritize ruthlessly, and ship fast.</p>
+<div class="container">
 
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number">16</div>
-                <div class="stat-label">Week Sprint to Launch</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">2</div>
-                <div class="stat-label">Chains (Solana + BSC)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">$1.5M</div>
-                <div class="stat-label">Target ARR (Month 12)</div>
-            </div>
-        </div>
-
-        <h2>What You'll Do</h2>
-
-        <div class="responsibilities-grid">
-            <div class="responsibility-card">
-                <h4>📋 Own the Roadmap</h4>
-                <p>Drive the 16-week milestone plan from beta launch to full platform. Make trade-off decisions. Keep the team focused and unblocked.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>🚢 Ship Features Weekly</h4>
-                <p>Coordinate across Tech Lead, Backend Engineer, and Designer. Run standups, track progress, remove blockers, ensure on-time delivery.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>📊 Define Success Metrics</h4>
-                <p>Set KPIs for each feature. Track user adoption, revenue, retention. Use data to prioritize what builds next.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>👥 Talk to Users</h4>
-                <p>Run beta testing, gather feedback, understand pain points. Turn user insights into product requirements.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>⚡ Manage Risk</h4>
-                <p>Identify bottlenecks early. Mitigate technical debt. Escalate blockers before they delay launches.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>🎯 Prioritize Ruthlessly</h4>
-                <p>Decide what ships now vs later. Balance revenue features with platform stability. Say no to scope creep.</p>
-            </div>
-        </div>
-
-        <h2>Your Responsibilities by Phase</h2>
-
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-phase">Month 1<br>Beta Launch</div>
-                <div class="timeline-content">
-                    Coordinate token creation, bundling, Twitter tracker, browser extension, limit orders, DCA, and wallet tracker launch. Manage beta testing with 50-100 users. Define success metrics for revenue and engagement.
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-phase">Month 2<br>Expansion</div>
-                <div class="timeline-content">
-                    Launch AI website builder, PnL dashboard, mobile app, and BSC chain support. Prioritize features based on Month 1 learnings. Coordinate App Store submissions.
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-phase">Month 3<br>Monetization</div>
-                <div class="timeline-content">
-                    Ship Telegram tracker, trending page, and ads system. Define pricing strategy for ads. Work with partnerships to onboard advertisers.
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-phase">Month 4<br>Scale</div>
-                <div class="timeline-content">
-                    Launch public API with paid tiers, performance optimization, swap engine, and sniper bot. Prepare go-to-market strategy for reaching 20K MAU.
-                </div>
-            </div>
-        </div>
-
-        <h2>What We're Looking For</h2>
-
-        <div class="highlight-box">
-            <h3>Required Experience</h3>
-            <ul>
-                <li>3+ years as a Product Manager, preferably in crypto, fintech, or high-velocity startups</li>
-                <li>Proven track record of shipping complex technical products from 0 to 1</li>
-                <li>Deep understanding of crypto/web3 fundamentals — DeFi, DEXs, token economics, on-chain trading</li>
-                <li>Experience working with engineering teams in agile environments</li>
-                <li>Strong analytical skills — you make data-driven decisions and track metrics religiously</li>
-                <li>Excellent written and verbal communication — you document decisions and keep stakeholders aligned</li>
-            </ul>
-        </div>
-
-        <div class="highlight-box">
-            <h3>Bonus Points</h3>
-            <ul>
-                <li>You've shipped products on Solana, BSC, or other EVM chains</li>
-                <li>You've built trading tools, bots, or DeFi platforms</li>
-                <li>You're active in crypto Twitter, Telegram alpha groups, or on-chain communities</li>
-                <li>You have experience with monetization strategies (ads, subscriptions, paid APIs)</li>
-                <li>You've managed product launches that scaled to thousands of users quickly</li>
-            </ul>
-        </div>
-
-        <h3>Key Skills</h3>
-        <div class="skills-list">
-            <div class="skill-tag">Roadmap Planning</div>
-            <div class="skill-tag">Agile/Scrum</div>
-            <div class="skill-tag">User Research</div>
-            <div class="skill-tag">Data Analysis</div>
-            <div class="skill-tag">Technical Writing</div>
-            <div class="skill-tag">Crypto/Web3</div>
-            <div class="skill-tag">Cross-functional Leadership</div>
-            <div class="skill-tag">Prioritization</div>
-            <div class="skill-tag">Stakeholder Management</div>
-            <div class="skill-tag">Go-to-Market Strategy</div>
-        </div>
-
-        <h2>Who You Are</h2>
-
-        <ul>
-            <li><strong>Execution-focused:</strong> You bias toward action. You'd rather ship and iterate than plan forever.</li>
-            <li><strong>Detail-oriented:</strong> You sweat the small stuff. You catch edge cases. You write specs that engineers love.</li>
-            <li><strong>User-obsessed:</strong> You talk to users constantly. You understand their pain. You build solutions, not features.</li>
-            <li><strong>Comfortable with ambiguity:</strong> You thrive in fast-moving environments. You make decisions with incomplete information.</li>
-            <li><strong>Crypto-native:</strong> You understand mempool sniping, MEV protection, bundling, limit orders, and DCA strategies.</li>
-            <li><strong>Team player:</strong> You collaborate well with engineers and designers. You give credit, take responsibility.</li>
-        </ul>
-
-        <h2>Why Join tokenLauncher.fun</h2>
-
-        <div class="highlight-box">
-            <ul>
-                <li><strong>Build something massive:</strong> Full platform in 16 weeks. $1.5M ARR target by Month 12. You'll have real impact.</li>
-                <li><strong>Work with top talent:</strong> Small, elite team. Tech Lead handling architecture and chain indexing. Backend Engineer on APIs and trackers. Designer on UI/UX and mobile.</li>
-                <li><strong>Own your domain:</strong> You're the PM. You set priorities. You make the calls. High autonomy, high accountability.</li>
-                <li><strong>Fast growth:</strong> We're moving fast. Launch beta Month 1. Multi-chain by Month 2. Revenue from Day 1.</li>
-                <li><strong>Remote-first:</strong> Work from anywhere. Async communication. Results over hours.</li>
-            </ul>
-        </div>
-
-        <h2>The Team You'll Work With</h2>
-
-        <div class="responsibilities-grid">
-            <div class="responsibility-card">
-                <h4>Tech Lead</h4>
-                <p>Handles architecture, trading engine, system design, code reviews, and chain indexing. Your technical partner for feasibility and timelines.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>Backend Engineer</h4>
-                <p>Builds Twitter tracker, APIs, execution routines, and backend infrastructure. Your go-to for data pipelines and integrations.</p>
-            </div>
-            <div class="responsibility-card">
-                <h4>Product Designer</h4>
-                <p>Owns UI/UX, frontend development, and website builder templates. Your partner for user experience and visual design.</p>
-            </div>
-        </div>
-
-        <h2>How to Apply</h2>
-
-        <p>We're looking for someone who can start immediately and commit to the 16-week sprint. If you're ready to ship fast, prioritize ruthlessly, and build a product that traders actually use, we want to hear from you.</p>
-
-        <div class="cta-section">
-            <h3>Ready to Build the Future of Crypto Trading?</h3>
-            <p>Send us your resume, a brief intro about why you're the right PM for this, and a link to a product you've shipped.</p>
-            <a href="mailto:careers@tokenlauncher.fun" class="apply-button">Apply Now</a>
-        </div>
-
-        <div class="footer">
-            tokenLauncher.fun — Building the All-in-One Crypto Platform
-        </div>
+  <!-- Header -->
+  <header>
+    <div class="header-top fade-up">
+      <div class="logo">tokenLauncher.fun</div>
+      <div class="badge-hiring">Actively Hiring</div>
     </div>
+    <h1 class="fade-up">Join Us. Drive the Build.</h1>
+    <p class="subtitle fade-up">Our engineering team is built. Now we need a Project Manager to drive execution across a 16-week sprint to launch an all-in-one crypto trading platform.</p>
+  </header>
+
+  <!-- About -->
+  <section>
+    <div class="section-label fade-up">About the Project</div>
+    <div class="section-title fade-up">tokenLauncher.fun</div>
+    <p class="job-desc fade-up" style="margin-bottom: 24px;">A full-stack crypto platform covering token creation, bundling, social tracking, trading tools, and monetization — starting on Solana, expanding to BSC and beyond. We ship fast, iterate relentlessly, and build tools that traders actually want.</p>
+
+    <div class="about-grid fade-up">
+      <div class="about-card">
+        <div class="label">Timeline</div>
+        <div class="value">16 Weeks — 4 Milestones</div>
+      </div>
+      <div class="about-card">
+        <div class="label">Team Size</div>
+        <div class="value">3 Engineers Hired — PM Needed</div>
+      </div>
+      <div class="about-card">
+        <div class="label">Chains</div>
+        <div class="value">Solana → BSC → Base → ETH</div>
+      </div>
+
+    </div>
+
+    <div class="timeline fade-up" style="margin-top: 24px;">
+      <div class="timeline-block">
+        <div class="timeline-month">Month 1</div>
+        <div class="timeline-label">Beta Launch (Solana)</div>
+      </div>
+      <div class="timeline-block">
+        <div class="timeline-month">Month 2</div>
+        <div class="timeline-label">Expansion + BSC</div>
+      </div>
+      <div class="timeline-block">
+        <div class="timeline-month">Month 3</div>
+        <div class="timeline-label">Social & Monetization</div>
+      </div>
+      <div class="timeline-block">
+        <div class="timeline-month">Month 4</div>
+        <div class="timeline-label">Trading Engine</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Positions -->
+  <section>
+    <div class="section-label fade-up">Open Position</div>
+    <div class="section-title fade-up">We Need a Project Manager.</div>
+
+    <!-- Project Manager -->
+    <div class="job-card fade-up">
+      <div class="job-header">
+        <div class="job-title">Project Manager</div>
+        <div class="job-type type-tl">PM</div>
+      </div>
+      <p class="job-desc">Coordinate and drive a 16-week product sprint across a 3-person engineering team (Tech Lead, Backend Engineer, Product Designer). You'll own the roadmap execution, sprint planning, milestone tracking, risk management, and stakeholder communication. Keep everyone aligned, unblock issues fast, and make sure we ship on time — every single week.</p>
+      <div class="job-tags">
+        <span class="tag">Sprint Planning</span>
+        <span class="tag">Agile / Scrum</span>
+        <span class="tag">Roadmap Management</span>
+        <span class="tag">Risk Mitigation</span>
+        <span class="tag">Stakeholder Comms</span>
+        <span class="tag">Jira / Linear</span>
+        <span class="tag">Crypto / DeFi</span>
+        <span class="tag">Cross-functional</span>
+      </div>
+      <div class="job-meta">
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="meta-value">Remote</span>
+        </div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span class="meta-value">Full-time / Contract</span>
+        </div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span class="meta-value">Start Immediately</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We're Looking For -->
+  <section>
+    <div class="section-label fade-up">Requirements</div>
+    <div class="section-title fade-up">What We're Looking For</div>
+    <ul class="req-list fade-up">
+      <li>Experience managing fast-paced crypto or Web3 product builds from zero to launch</li>
+      <li>Proven track record of shipping products on tight timelines with small engineering teams</li>
+      <li>Strong understanding of agile methodologies — sprints, standups, retros, backlog grooming</li>
+      <li>Familiarity with DeFi, DEXs, and token ecosystems — you don't need to code, but you need to speak the language</li>
+      <li>Excellent at unblocking engineers, managing dependencies, and keeping 3+ workstreams on track simultaneously</li>
+      <li>Experience with project tools like Linear, Jira, Notion, or similar — and strong async communication skills</li>
+      <li>Available to start within 1–2 weeks. The team is ready — we just need someone to drive execution.</li>
+    </ul>
+  </section>
+
+
+
+  <!-- Application Form -->
+  <section class="cta-section" style="text-align: left;">
+    <div class="section-label fade-up">Apply Now</div>
+    <div class="section-title fade-up">Ready to Drive the Build?</div>
+    <p class="cta-subtitle fade-up" style="text-align: left;">Upload your CV and tell us about yourself. No cover letters. No fluff.</p>
+
+    <form action="https://formsubmit.co/benahcenemohamed@gmail.com" method="POST" enctype="multipart/form-data" class="apply-form fade-up">
+      <!-- FormSubmit config -->
+      <input type="hidden" name="_subject" value="New PM Application — tokenLauncher.fun">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="box">
+      <input type="hidden" name="_next" value="">
+
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="linkedin">LinkedIn / Portfolio URL</label>
+        <input type="url" id="linkedin" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="experience">Relevant Experience</label>
+        <textarea id="experience" name="experience" class="form-input form-textarea" placeholder="Briefly describe your PM experience in crypto/Web3..." rows="4" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cv">Upload CV / Resume</label>
+        <div class="file-upload" id="file-upload-area">
+          <input type="file" id="cv" name="attachment" accept=".pdf,.doc,.docx" required class="file-input">
+          <div class="file-upload-content">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span class="file-upload-text">Click to upload or drag & drop</span>
+            <span class="file-upload-hint">PDF, DOC, DOCX — Max 5MB</span>
+          </div>
+        </div>
+        <div class="file-name" id="file-name"></div>
+      </div>
+
+      <button type="submit" class="cta-button" style="width: 100%; justify-content: center; margin-top: 8px;">
+        Submit Application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </form>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    tokenLauncher.fun — Confidential Job Posting
+  </div>
+</footer>
+
+<script>
+  const fileInput = document.getElementById('cv');
+  const fileNameDisplay = document.getElementById('file-name');
+  const fileUploadArea = document.getElementById('file-upload-area');
+
+  fileInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      fileNameDisplay.textContent = '✓ ' + this.files[0].name;
+      fileUploadArea.classList.add('has-file');
+    } else {
+      fileNameDisplay.textContent = '';
+      fileUploadArea.classList.remove('has-file');
+    }
+  });
+</script>
+
 </body>
 </html>
